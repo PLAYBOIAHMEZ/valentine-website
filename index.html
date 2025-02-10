@@ -118,7 +118,7 @@
         })();
 
       window.isDevice =
-        /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+        /android|samsung|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
           (
             navigator.userAgent ||
             navigator.vendor ||
@@ -132,7 +132,7 @@
         if (loaded) return;
         loaded = true;
         var mobile = window.isDevice;
-        var koef = mobile ? 0.5 : 1;
+        var koef = mobile ? 0.3 : 1;
         var canvas = document.getElementById("heart");
         var ctx = canvas.getContext("2d");
         var width = (canvas.width = koef * innerWidth);
