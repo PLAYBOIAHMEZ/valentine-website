@@ -132,7 +132,7 @@
         if (loaded) return;
         loaded = true;
         var mobile = window.isDevice;
-        var koef = mobile ? 1 : 1;
+        var koef = mobile ? 1.3 : 1;
         var canvas = document.getElementById("heart");
         var ctx = canvas.getContext("2d");
         var width = (canvas.width = koef * innerWidth);
@@ -300,22 +300,25 @@
         const rose = document.createElement("div");
         rose.className = "rose";
         rose.textContent = "🌹";
-        rose.style.left = `${Math.random() * 100}vw`;
-        rose.style.animationDuration = `${20 + Math.random() * 10}s`;
-        rose.style.animationDelay = `-${Math.random() * 20}s`;
+        rose.style.left = `${Math.random() * 100}vw`; // Full width range
+        rose.style.bottom = "-5vh"; // Start below the screen
+        rose.style.animationDuration = `${10 + Math.random() * 10}s`;
+        rose.style.animationDelay = `-${Math.random() * 10}s`;
+        rose.style.zIndex = "3"; // Ensure it's above other elements
         document.body.appendChild(rose);
 
         setTimeout(() => {
           rose.remove();
-        }, 30000);
+        }, 15000); // Remove after 15 seconds
       }
 
       function initRoses() {
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
           createRose();
         }
-        setInterval(createRose, 3000);
+        setInterval(createRose, 2000);
       }
+      initRoses();
 
       // Initialize everything
       document.addEventListener("DOMContentLoaded", () => {
