@@ -57,6 +57,7 @@
         cursor: pointer;
         border-radius: 5px;
         transition: background-color 0.3s;
+        margin: 10px;
       }
       button:hover {
         background-color: #ff4d4d;
@@ -85,6 +86,26 @@
           transform: translateY(-100vh) rotate(360deg);
         }
       }
+      #musicControls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 10px;
+        -webkit-backdrop-filter: blur(5px); /* Added for Safari compatibility */
+        backdrop-filter: blur(5px);
+      }
+
+      #musicControls button {
+        margin: 0;
+        padding: 8px 15px;
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -98,7 +119,77 @@
       <button onclick="generateLoveMessage()">Generate Love Message💌</button>
     </div>
 
+    <div id="musicControls">
+      <button onclick="prevTrack()">⏮ Prev</button>
+      <button onclick="toggleMusic()" id="musicToggle">Pause Music</button>
+      <button onclick="nextTrack()">⏭ Next</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+      <source
+        src="assets/Ruth B. - Dandelions (Lyrics).mp3"
+        type="audio/mpeg"
+      />
+      Your browser does not support the audio element.
+    </audio>
+
     <script>
+      // Audio Control
+      const tracks = [
+        "assets/Ruth B. - Dandelions (Lyrics).mp3",
+        "assets/Him&I.mp3",
+        "assets/Kaash Paige - Love Songs (Lyrics)   i miss my cocoa butter kisses, hope you smile when you listen.mp3 ",
+      ];
+      let currentTrack = 0;
+      const bgMusic = document.getElementById("bgMusic");
+      const musicToggle = document.getElementById("musicToggle");
+      let isMusicPlaying = false;
+
+      function initMusic() {
+        // Try to play music when user interacts with the page
+        document.addEventListener(
+          "click",
+          function initAudio() {
+            if (!isMusicPlaying) {
+              bgMusic
+                .play()
+                .then(() => {
+                  isMusicPlaying = true;
+                  musicToggle.textContent = "Pause Music";
+                })
+                .catch((err) => console.log("Audio playback failed:", err));
+            }
+            document.removeEventListener("click", initAudio);
+          },
+          { once: true }
+        );
+      }
+
+      function toggleMusic() {
+        if (isMusicPlaying) {
+          bgMusic.pause();
+          musicToggle.textContent = "Play Music";
+        } else {
+          bgMusic.play();
+          musicToggle.textContent = "Pause Music";
+        }
+        isMusicPlaying = !isMusicPlaying;
+      }
+      function nextTrack() {
+        currentTrack = (currentTrack + 1) % tracks.length;
+        bgMusic.src = tracks[currentTrack];
+        bgMusic.play();
+        isMusicPlaying = true;
+        musicToggle.textContent = "Pause Music";
+      }
+      function prevTrack() {
+        currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+        bgMusic.src = tracks[currentTrack];
+        bgMusic.play();
+        isMusicPlaying = true;
+        musicToggle.textContent = "Pause Music";
+      }
+
       // Heart animation code
       window.requestAnimationFrame =
         window.__requestAnimationFrame ||
@@ -263,8 +354,8 @@
 
       // Love message generator
       const loveMessages = [
-        "Every day with you feels like Valentine’s Day. I love you, Manal!💕",
-        "My heart is yours, today and forever. Happy Valentine’s, my love!❤️",
+        "Every day with you feels like Valentine's Day. I love you, Manal!💕",
+        "My heart is yours, today and forever. Happy Valentine's, my love!❤️",
         "In the darkness, our love shines brightest🌞.",
         "Like black roses, our love is rare and beautiful.",
         "I love you Manal! you frog and donkey lookin girl😂.",
@@ -318,12 +409,12 @@
         }
         setInterval(createRose, 2000);
       }
-      initRoses();
 
       // Initialize everything
       document.addEventListener("DOMContentLoaded", () => {
         init(); // Initialize heart animation
         initRoses(); // Initialize floating roses
+        initMusic(); // Initialize background music
       });
     </script>
   </body>
